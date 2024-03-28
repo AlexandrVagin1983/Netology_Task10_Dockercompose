@@ -1,0 +1,23 @@
+services:
+  storage:
+    image: redis
+    volumes:
+      - ./data:/data
+  counter:
+    image: vagin1983/counter:v1.0.0
+    environment:
+      - PORT=3002
+      - REDIS_URL=redis://storage
+    ports:
+      - 3002:3002
+    depends_on:
+      - storage
+  books:
+    image: vagin1983/books:v1.0.0
+    environment:
+      - PORT=3000
+      - PORT_REIDS=3002
+    ports:
+      - 80:3000
+    depends_on:
+      - counter
